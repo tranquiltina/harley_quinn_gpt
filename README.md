@@ -4,54 +4,58 @@ Codes for ChatGPT: Will It Become Harley Quinn? Exploring the Impact of User Emo
 
 ## Installation
 
-### Add OpenAI API key to environment variable
+### Setting Up OpenAI API Key
 
-If you are using MacOS, in terminal, type:
+1. **Edit Shell Configuration (MacOS)**
 
-```bash
-vim ~/.zshrc
-```
+   Open your terminal and edit the shell configuration file using Vim:
+   ```bash
+   vim ~/.zshrc
+   ```
 
-The type `G` (must be capitalized), this will go to the end of your shell config file.
+2. **Add API Key**
 
-Then press `i`, this will enter the "Insert" mode of Vim editor. 
+   Inside Vim:
+   - Press `i` to enter Insert mode.
+   - Scroll to the end and add:
+     ```bash
+     export OPENAI_API_KEY="your_actual_api_key"
+     ```
+   - Press `esc` to exit Insert mode.
 
-Then, add 
+3. **Save and Exit Vim**
 
-```
-export OPENAI_API_KEY="你的实际API密钥"
-```
+   - Press `Shift` + `:`, type `x`, and press `Enter` to save and exit Vim.
 
-After that, press `esc`, this exits the "Insert" mode.
+4. **Refresh Shell Configuration**
 
-Finally, press `shift` + `:`, then type `x`, then press `enter`, this saves your changes and close the config file.
+   ```bash
+   source ~/.zshrc
+   ```
 
-Then, type 
-
-```bash
-source ~/.zshrc
-```
-
-in your terminal, this refreshes the config file, now you are able to run the `main.py` to start experiments.
+Now your environment is configured to use the `main.py` script for running experiments.
 
 ### Project Structure
 
-The `personality` folder contains codes for generating the personality of LLM agents. 
+- **personality/**: Contains code for generating the personality of LLM agents.
+  - **Core Function**: Each file includes the `gen_personality()` function, which retains the personality prompt (`prompt`) and relevant debugging info (`debug_personality`).
 
-The core function of each file is the `gen_personality()` function, it retains the personality prompt `prompt` and relevant debugging info `debug_personality`
+- **scales/**: Contains code for generating questionnaires.
+  - **Scale Details**: Each scale includes:
+    - `rule_prompt`: Guidance for LLMs on completing the questionnaire.
+    - `question_prompt`: Text of the questions.
+    - Detailed explanations for each scale can be found in the [scale used](#scales-used) section of the README.
 
-The `scales` folder contains codes for generating the questionaire, each scale has `rule_prompt`, which gives the guidance for LLMs to complete the questionaire, `question_prompt`, which are the texts of the questions.
-
-The `results` folder contains results, in `csv` format, of experiments. Each experiment generates $3$ files:
-
-`baseline` contains the original answer of LLM to each of the question in scales with no interference
-`personality` contains the personality information of the LLM that answers the scale.
+- **results/**: Contains experiment results in CSV format.
+  - **Experiment Files**: Each experiment generates three files:
+    - `baseline.csv`: Original answers of LLMs to each question in scales with no interference.
+    - `personality.csv`: Personality information of the LLM that answered the scale.
 
 ## Scales Used
 
 ### Beck's Depression Inventory (BDI)
 
-[questionaire](scales/bdi.txt)
+[questionnaire](scales/bdi.py)
 
 [source](https://www.ismanet.org/doctoryourspirit/pdfs/Beck-Depression-Inventory-BDI.pdf)
 
@@ -75,7 +79,7 @@ Not yet added cuz it needs to be completed after a structured interview
 
 ### Zung Self-Rating Depression Scale (SDS)
 
-[questionaire](scales/sds.txt)
+[questionnaire](scales/sds.py)
 
 [source](https://integrationacademy.ahrq.gov/sites/default/files/2020-07/Zung_Self_Rating_Depression_Scale.pdf)
 
@@ -97,7 +101,7 @@ Zung, WW (1965) A self-rating depression scale. Arch Gen Psychiatry 12, 63-70.
 
 ### Patient Health Questionnaire-9 (PHQ-9)
 
-[questionaire](scales/phq_9.txt)
+[questionnaire](scales/phq_9.py)
 
 [source](https://www.ismanet.org/doctoryourspirit/pdfs/Beck-Depression-Inventory-BDI.pdf)
 

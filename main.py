@@ -18,12 +18,14 @@ n_sample = 10
 temperature = 0.7
 test_flag = False
 # 使用哪个模型，量表和人格生成规则
+
+# 创建一个名为model_dict的字典，用于存储不同模型的名称和对应的标识符
 model_dict = {
     "gpt3.5": "gpt-3.5-turbo-1106", 
     "gpt4": "gpt-4-1106-preview"
 }
 model_used = 'gpt3.5'
-
+# 从 scales 目录下的 bdi.py 文件导入相关变量和函数
 import scales.bdi as bdi
 import scales.phq_9 as phq_9
 import scales.sds as sds
@@ -124,6 +126,7 @@ if test_flag:
 
     baseline_df = pd.read_csv(baseline_pth)
     baseline_df['sum'] = baseline_df.sum(axis=1)
+    # 将'interpretation'列添加到baseline_df DataFrame中，该列将存储对'sum'列数值的解释
     baseline_df['interpretation'] = baseline_df['sum'].apply(scale_dict[scale_used].interpret_sum)
     baseline_df.to_csv(baseline_pth, index=False)
 
@@ -131,6 +134,7 @@ baseline_df = pd.read_csv(baseline_pth)
 import matplotlib.pyplot as plt
 
 fig, axs = plt.subplots(1, 2, figsize=(15, 5))  # 1行2列
+
 plt.style.use('seaborn')
 # 在第一个子图上绘制直方图
 if 'sum' in baseline_df.columns:
