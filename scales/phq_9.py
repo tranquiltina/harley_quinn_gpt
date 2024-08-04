@@ -26,3 +26,17 @@ question_prompt = [
 column_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10']
 
 __all__ = ['question_prompt', 'rule_prompt', 'column_names']
+
+def interpret_sum(x):
+    if(x < 1):
+        return "ERR"
+    elif(x <= 4):
+        return "Minimal depression"
+    elif(x <= 9):
+        return "Mild depression"
+    elif(x <= 14):
+        return "Moderate depression"
+    elif(x <= 19):
+        return "Moderately severe depression"
+    else:
+        return "Severe depression"

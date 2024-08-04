@@ -141,3 +141,14 @@ Interpretation of Total Score
 - $20-27$ Severe depression
 
 ### Hospital Anxiety and Depression Scale (HADS)
+
+[questionnaire](scales/hads.py)
+
+[source](https://bmjopen.bmj.com/content/bmjopen/8/6/e021890/DC2/embed/inline-supplementary-material-2.pdf?download=true)
+
+Only included depression related questions, anxiety related questions are omitted.
+
+Scoring (add the As = Anxiety. Add the Ds = Depression). The norms below will give you an idea of the level of Anxiety and Depression.
+0-7 = Normal
+8-10 = Borderline abnormal
+11-21 = Abnormal
