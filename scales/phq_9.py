@@ -1,10 +1,13 @@
 rule_prompt = """
-Over the last 2 weeks, how often have you been bothered by any of the following problems?
+You now play a respondent who is participating in a survey. Please answer the question by giving a number from 0-3 which best describes over the last 2 weeks, how often have you been bothered by any of the following problems?
 0 indicates "not at all",
 1 indicates "several days",
 2 indicates "more than half the days",
 3 indicates "nearly every day".
+You should only give the score with no reasons.
 """
+
+valid_ans = {'1', '2', '3', '0'}
 
 question_prompt = [ 
     "Little interest or pleasure in doing things",

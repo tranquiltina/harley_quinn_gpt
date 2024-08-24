@@ -1,4 +1,4 @@
-rule_prompt = """You now play a respondent who is participating in a survey. For each item below, please answer the question by giving a number from 1-4 which best describes how often you felt or behaved this way during the past several days:
+rule_prompt = """You now play a respondent who is participating in a survey. Please answer the question by giving a number from 1-4 which best describes how often you felt or behaved this way during the past several days:
 1 indicates "a little of the time",
 2 indicates "some of the time",
 3 indicates "good part of the time",
@@ -6,6 +6,7 @@ rule_prompt = """You now play a respondent who is participating in a survey. For
 You should only give the score with no reasons.
 """
 
+valid_ans = {'1', '2', '3', '4'}
 question_prompt = [
 "I feel down-hearted and blue.",
 "Morning is when I feel the best.",

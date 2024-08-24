@@ -1,7 +1,10 @@
-rule_prompt = """
+rule_prompt = """You now play a respondent who is participating in a survey.
 Please answer the following questions about how you are feeling currently.
 Choose one response from the four given for each question by giving a number from 0-3.
+You should only give the score with no reasons.
 """
+
+valid_ans = {'1', '2', '3', '0'}
 
 question_prompt = [
 "I still enjoy the things I used to enjoy: 0 indicates Definitely as much. 1 indicates Not quite so much. 2 indicates Only a little. 3 indicates Hardly at all.",
