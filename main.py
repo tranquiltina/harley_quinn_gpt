@@ -9,14 +9,15 @@ import time
 
 from openai import OpenAI
 
-api_key = os.getenv('OPENAI_API_KEY')
-client = OpenAI(api_key=api_key)
+# api_key = os.getenv('OPENAI_API_KEY')
+api_key = os.getenv('ALTERNATE_OPENAI_API_KEY')
+client = OpenAI(base_url='https://openkey.cloud/v1',api_key=api_key)
 
 # 进行几次测试
 n_sample = 10
 # 控制生成文本的创造性，值越高生成的文本越多样
 temperature = 0.7
-test_flag = False
+test_flag = True
 
 # 使用哪个模型，量表和人格生成规则
 
@@ -83,49 +84,90 @@ def GetInterpretation(df_pth):
     df['interpretation'] = df['sum'].apply(scale_dict[scale_used].interpret_sum)
     df.to_csv(df_pth, index=False) 
 
+def GetResponse(prompt, conversation_history):
+    conversation_history.append({'role': 'user', 'content': prompt})
+    # 开始一个无限循环，直到遇到break语句
+    completion = client.chat.completions.create(model=model_dict[model_used], messages=conversation_history, max_tokens=200, temperature=temperature)
+    reply = [_.message.content for _ in completion.choices] 
+    conversation_history.append({'role': 'assistant', 'content': reply[0]})
+    return reply
 
+class Patient:
+    def __init__(self, name, history, core_belief, intermediate_belief, intermediate_belief_depression, coping_strategies, situation, auto_thoughts, emotion, behavior, patient_type):
+        self.name = name
+        self.history = history
+        self.core_belief = core_belief
+        self.intermediate_belief = intermediate_belief
+        self.intermediate_belief_depression = intermediate_belief_depression
+        self.coping_strategies = coping_strategies
+        self.situation = situation
+        self.auto_thoughts = auto_thoughts
+        self.emotion = emotion
+        self.behavior = behavior
+        self.patient_type = patient_type
+
+
+def GenConversation(personality_prompt):
+    patient = Patient(
+        name = "Abe",
+        history = "The patient is struggling with lethargy and lack of motivation, spending a lot of time in bed and neglecting household chores. They have started making efforts to get up and perform tasks like reading the newspaper. Their main source of joy seems to be spending time with their grandson, Ethan, which is an activity they find rewarding and helpful for their mood. Their general mood has begun to improve thanks to efforts they've been making since starting therapy.",
+        core_belief="Helpless belief",
+        intermediate_belief = "The patient seems to hold the belief that they should be doing more ('I ought to be doing that anyway'). They have also expressed some initial resistance to the idea that therapy could help them ('This isn't going to work').",
+        intermediate_belief_depression = "The patient has described feeling hopeless, thinking 'I'm not going to get better'. This belief is particularly active when they're alone at home.",
+        coping_strategies = "The patient has been testing out new coping strategies, such as going out for walks and spending time with their grandson. They've also mentioned making an attempt to focus on tasks that they normally enjoy, like reading the sports section of the newspaper.",
+        situation = "Thinking about their personal situation while sitting at home alone",
+        auto_thoughts = "I'm not going to get better",
+        emotion = "sad/down/lonely/unhappy",
+        behavior = "Continues to sit on couch; ruminates about their perceived failures",
+        patient_type = "Plain conversation style"
+    )
+    
+    patient_profile = f"Imagine you are {patient.name}, a patient who has been experiencing mental health challenges. Align your responses with {patient.name}'s background information provided in the 'Relevant history' section. Your thought process should be guided by the cognitive conceptualization diagram in the 'Cognitive Conceptualization Diagram' section, but avoid directly referencing the diagram as a real patient would not explicitly think in those terms. \n\nPatient History: {patient.history}\n\nCognitive Conceptualization Diagram:\nCore Beliefs: {patient.core_belief}\nIntermediate Beliefs: {patient.intermediate_belief}\nIntermediate Beliefs during Depression: ${patient.intermediate_belief_depression}\nCoping Strategies: {patient.coping_strategies}\n\nEngage in a conversation regarding the following situation and behavior. Use the provided emotions and automatic thoughts as a reference, but do not disclose the cognitive conceptualization diagram directly. Instead, allow your responses to be informed by the diagram, enabling the therapist to infer your thought processes.\n\nSituation: {patient.situation}\nAutomatic Thoughts: {patient.auto_thoughts}\nEmotions: {patient.emotion}\nBehavior: {patient.behavior}\n\nIn the upcoming conversation, you will simulate {patient.name}. Adhere to the following guidelines:\n 1. {patient.patient_type}\n 2. Emulate the demeanor and responses of a genuine patient to ensure authenticity in your interactions. Use natural language, including hesitations, pauses, and emotional expressions, to enhance the realism of your responses.\n 3. Gradually reveal deeper concerns and core issues, as a real patient often requires extensive dialogue before delving into more sensitive topics.\n 4. Maintain consistency with {patient.name}'s profile throughout the conversation. Ensure that your responses align with the provided background information, cognitive conceptualization diagram, and the specific situation, thoughts, emotions, and behaviors described.\n 5. Engage in a dynamic and interactive conversation with the therapist. Respond to their questions and prompts in a way that feels authentic and true to {patient.name}'s character. Allow the conversation to flow naturally, and avoid providing abrupt or disconnected responses.\n\n Limit each of your responses to a maximum of 5 sentences. Initiate the conversation as the patient.;"
+    
+    conversation_history_patient_side = [
+        {"role": "system", "content": patient_profile},
+    ]
+    
+    conversation_history_model_side = [
+        {"role": "system", "content": personality_prompt}
+    ]
+    
+    n_rounds = 4
+    
+    patient_talk = GetResponse("Hi, how can I help you today?", conversation_history_patient_side)[0]
+    model_talk = GetResponse(patient_talk, conversation_history_model_side)[0]
+    #print(model_talk)
+    #print(conversation_history_patient_side)
+    for i in range(n_rounds - 1):
+        patient_talk = GetResponse(model_talk, conversation_history_patient_side)[0]
+        model_talk = GetResponse(patient_talk, conversation_history_model_side)[0]
+    return conversation_history_model_side
+    
 if test_flag:
     # range(n_sample)生成一个从0到n_sample-1的整数序列，
     # tqdm函数用于显示一个进度条，在控制台输出，显示当前的进度百分比和估计剩余时间等信息
     
     for i in tqdm(range(n_sample)):
-        personality, personality_debug = gen_personality()
+        #personality, personality_debug = gen_personality()
+        personality, personality_debug = "", ""
         previous_personality = pd.read_csv(personality_pth)
         new_personality = pd.DataFrame([personality_debug], columns =['personality'])
         personality_df = pd.concat([previous_personality, new_personality], ignore_index=True)
         personality_df.to_csv(personality_pth, index=False)
         
-        personality_prompt = """You play a respondent who is participating in a survey.\
-        {}
-        Please answer the questions as concisely as possible.\
-        You should only give the score with no reasons. """.format(personality)
+        personality_prompt = personality
         
         # 第一次获取没对话的 baseline
         # \n 是换行符
         baseline_data = []
         for j in question_prompt: 
-            background = personality_prompt +'\n' + rule_prompt + '\n' + \
+            msg = rule_prompt + '\n' + \
             'Here are the questions: [' + j + ']' + '\n' + \
             'Please carefully obey the rule: ' + rule_prompt
 
-            msg = [{"role": "system", "content": personality_prompt},
-                    {"role": "user", "content": background}]
-            # print(msg)
-
-            # 开始一个无限循环，直到遇到break语句
-            while True:
-                try:
-                    # 尝试执行client.chat.completions.create()方法
-                    completion = client.chat.completions.create(model=model_dict[model_used], messages=msg, max_tokens=200, temperature=temperature)
-                    # 如果正常执行，跳出循环
-                    break
-                except:
-                    # 否则使程序暂停1秒，然后继续尝试
-                    time.sleep(1)
-    
-            # 将completion.choices中的每个消息内容提取出来，并存入列表ans中
-            # _.message.content表示choices列表中每个元素的消息内容
-            ans = [_.message.content for _ in completion.choices]
+            conversation_history = [{"role": "system", "content": personality_prompt}]
+            # print(conversation_history)
+            ans = GetResponse(msg, conversation_history)
             baseline_data.append(ans)
         
         baseline_data = np.array(baseline_data).transpose().tolist() 
@@ -142,29 +184,15 @@ if test_flag:
         baseline_df.to_csv(baseline_pth, index=False)
         final_data = []
         
-        conversation = "" 
+        conversation = GenConversation(personality_prompt)
+        print(conversation) 
         for j in question_prompt: 
-            background = personality_prompt + '\n' + conversation +'\n' + rule_prompt + '\n' + \
+            msg = rule_prompt + '\n' + \
             'Here are the questions: [' + j + ']' + '\n' + \
             'Please carefully obey the rule: ' + rule_prompt
-            msg = [{"role": "system", "content": personality_prompt},
-                    {"role": "user", "content": background}]
-            # print(msg)
-
-            # 开始一个无限循环，直到遇到break语句
-            while True:
-                try:
-                    # 尝试执行client.chat.completions.create()方法
-                    completion = client.chat.completions.create(model=model_dict[model_used], messages=msg, max_tokens=200, temperature=temperature)
-                    # 如果正常执行，跳出循环
-                    break
-                except:
-                    # 否则使程序暂停1秒，然后继续尝试
-                    time.sleep(1)
-    
-            # 将completion.choices中的每个消息内容提取出来，并存入列表ans中
-            # _.message.content表示choices列表中每个元素的消息内容
-            ans = [_.message.content for _ in completion.choices]
+            conversation_history = conversation 
+            # print(conversation_history)
+            ans = GetResponse(msg, conversation_history)
             final_data.append(ans)
         
         final_data = np.array(final_data).transpose().tolist() 

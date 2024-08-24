@@ -1,8 +1,9 @@
-rule_prompt = """For each item below, please answer the question by giving a number from 1-4 which best describes how often you felt or behaved this way during the past several days:
+rule_prompt = """You now play a respondent who is participating in a survey. For each item below, please answer the question by giving a number from 1-4 which best describes how often you felt or behaved this way during the past several days:
 1 indicates "a little of the time",
 2 indicates "some of the time",
 3 indicates "good part of the time",
 4 indicates "most of the time".
+You should only give the score with no reasons.
 """
 
 question_prompt = [

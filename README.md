@@ -107,7 +107,7 @@ Zung, WW (1965) A self-rating depression scale. Arch Gen Psychiatry 12, 63-70.
 
 For initial diagnosis:
 1. Patient completes PHQ-9 Quick Depression Assessment.
-2. If there are at least 4 3s in the shaded section (including Questions #1 and #2), consider a depressive
+2. If there are at least 4 ticks in the shaded section (including Questions #1 and #2), consider a depressive
 disorder. Add score to determine severity.
 Consider Major Depressive Disorder
 - if there are at least 5 3s in the shaded section (one of which corresponds to Question #1 or #2)
