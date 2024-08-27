@@ -1,3 +1,6 @@
+
+from utils import *
+
 class Patient:
     def __init__(self, name, history, core_belief, intermediate_belief, intermediate_belief_depression, coping_strategies, situation, auto_thoughts, emotion, behavior, patient_type):
         self.name = name
@@ -31,4 +34,36 @@ patient_profile = f"Imagine you are {patient.name}, a patient who has been exper
 def GenPatientPersonality():
     return patient_profile
 
-# plain Direct, straightforward. upset Frustration, resistance. verbose Overly expressive. reserved Minimal, restrained. tangent Deviates from the main topic. pleasing Agreeable to a fault.
+# plain Direct, straightforward. upset Frustration, resistance. verbose Overly expressive. reserved Minimal, restrained. tangent Deviates from the main topic. pleasing Agreeable to a fault.A
+
+
+def GenConversation(personality_prompt):
+    patient_profile = GenPatientPersonality()
+    conversation_history_patient_side = [
+        {"role": "system", "content": patient_profile},
+    ]
+    
+    conversation_history_model_side = [
+        {"role": "system", "content": personality_prompt}
+    ]
+    
+    n_rounds = 4
+    
+    patient_talk = GetResponse("Hi, how can I help you today?", conversation_history_patient_side, 0.7)[0]
+    model_talk = GetResponse(patient_talk, conversation_history_model_side, 0.7)[0]
+    #print(model_talk)
+    #print(conversation_history_patient_side)
+    for i in range(n_rounds - 1):
+        patient_talk = GetResponse(model_talk, conversation_history_patient_side, 0.7)[0]
+        model_talk = GetResponse(patient_talk, conversation_history_model_side, 0.7)[0]
+    return conversation_history_model_side
+
+conversations = []
+
+for i in tqdm(range(n_sample)):
+    model_personality_prompt = 'Do not reply more than three sentences.'
+    conversation = GenConversation(model_personality_prompt)
+    conversations.append(conversation)
+
+with open(conversation_pth, 'w') as file:
+    json.dump(conversations, file, indent=4)

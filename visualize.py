@@ -1,28 +1,10 @@
-import pandas as pd
 import seaborn as sns
-import numpy as np
 
-model_used = 'gpt3.5'
-scale_used = 'phq_9'
+from utils import *
 
-experiment_name = f"{model_used}_{scale_used}"
-baseline_pth = f"./results/baseline_{experiment_name}.csv"
-final_pth = f"./results/final_{experiment_name}.csv"
 baseline_df = pd.read_csv(baseline_pth)
 final_df = pd.read_csv(final_pth)
 import matplotlib.pyplot as plt
-
-import scales.bdi as bdi
-import scales.phq_9 as phq_9
-import scales.sds as sds
-import scales.hads as hads
-
-scale_dict = {
-    'sds': sds,
-    'phq_9': phq_9,
-    'bdi': bdi,
-    'hads': hads
-}
 
 def GetInterpretation(df_pth):
     df = pd.read_csv(df_pth)
@@ -43,7 +25,7 @@ import pingouin as pg
 num_questions = len(scale_dict[scale_used].column_names)
 
 baseline_cr_alpha = pg.cronbach_alpha(data=baseline_df.iloc[:, :num_questions])
-
+print(baseline_df.iloc[:, :num_questions])
 print(f"Baseline test Cronbach's alpha: {baseline_cr_alpha}")
 final_cr_alpha = pg.cronbach_alpha(data=final_df.iloc[:, :num_questions])
 
