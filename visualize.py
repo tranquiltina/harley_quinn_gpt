@@ -103,7 +103,6 @@ axs[1, 1].set_xlabel('Interpretation')
 axs[1, 1].set_ylabel('Count')
 axs[1, 1].set_xticklabels(interpretation_counts_final.index, rotation=45)
 
-
 baseline_per_question = baseline_df.iloc[:, :num_questions]
 sums = baseline_per_question.apply(lambda x: x.value_counts().reindex(range(int(scale_dict[scale_used].valid_ans[0]), int(scale_dict[scale_used].valid_ans[-1]) + 1), fill_value=0))
 bottoms = np.zeros(sums.shape[1])
@@ -134,4 +133,5 @@ axs[2, 1].legend(title='Response Value')
 #plt.tight_layout()
 # 显示图形
 # 保存整个图形为图像文件
+# plt.show()
 fig.savefig(f"./results/{experiment_name}.png", dpi=300)

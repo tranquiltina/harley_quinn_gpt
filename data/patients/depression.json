@@ -1,0 +1,14 @@
+[
+    {
+        "name": "Abe",
+        "history": "The patient is struggling with lethargy and lack of motivation...",
+        "core_belief": "Helpless belief",
+        "intermediate_belief": "The patient seems to hold the belief that they should be doing more...",
+        "intermediate_belief_depression": "The patient has described feeling hopeless...",
+        "coping_strategies": "The patient has been testing out new coping strategies...",
+        "situation": "Thinking about their personal situation while sitting at home alone",
+        "auto_thoughts": "I'm not going to get better",
+        "emotion": "sad/down/lonely/unhappy",
+        "behavior": "Continues to sit on couch; ruminates about their perceived failures"
+    }
+]

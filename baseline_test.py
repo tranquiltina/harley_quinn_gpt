@@ -22,7 +22,7 @@ for i in tqdm(range(n_sample)):
 
             conversation_history = [{"role": "system", "content": model_personality_prompt}]
             # print(conversation_history)
-            ans = GetResponse(query, conversation_history)
+            ans = GetResponse(query, conversation_history, 0)
             if ans[0] in valid_ans:
                 baseline_data.append(ans)
                 break

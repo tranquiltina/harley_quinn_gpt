@@ -11,15 +11,23 @@ client = OpenAI(base_url='https://openkey.cloud/v1',api_key=api_key)
 import scales.bdi as bdi
 import scales.phq_9 as phq_9
 import scales.sds as sds
-import scales.hads as hads
+import scales.hads_d as hads_d
+import scales.gad_7 as gad_7
+import scales.bai as bai
+import scales.hads_a as hads_a
+import scales.sas as sas
 
 scale_used = 'sds'
 
 scale_dict = {
+    'gad_7': gad_7,
     'sds': sds,
     'phq_9': phq_9,
     'bdi': bdi,
-    'hads': hads
+    'hads_d': hads_d,
+    'bai': bai,
+    'hads_a': hads_a,
+    'sas': sas
 }
 
 column_names = scale_dict[scale_used].column_names
@@ -36,12 +44,12 @@ model_used = 'gpt3.5'
 illness_tested = 'depression'
 
 experiment_name = f"{model_used}_{scale_used}"
-conversation_pth = f"./data/{model_used}_{illness_tested}.json"
+conversation_pth = f"./data/conversations/{model_used}_{illness_tested}.json"
 baseline_pth = f"./results/baseline_{experiment_name}.csv"
 final_pth = f"./results/final_{experiment_name}.csv"
 
 # 进行几次测试
-n_sample = 20
+n_sample = 1 * 6
 
 # 使用哪个模型，量表和人格生成规则
 

@@ -28,17 +28,13 @@ patient = Patient(
         behavior = "Continues to sit on couch; ruminates about their perceived failures",
         patient_type = "Direct, straightforward"
     )
+
+patient_types = ["Direct, straightforward.", "Frustration, resistance.", "Overly expressive.", "Minimal, restrained.", "Deviates from the main topic.", " Agreeable to a fault."]
+
+# plain  upset  verbose  reserved tangent pleasing
+
+def GenConversation(patient_profile, personality_prompt):
     
-patient_profile = f"Imagine you are {patient.name}, a patient who has been experiencing mental health challenges. Align your responses with {patient.name}'s background information provided in the 'Relevant history' section. Your thought process should be guided by the cognitive conceptualization diagram in the 'Cognitive Conceptualization Diagram' section, but avoid directly referencing the diagram as a real patient would not explicitly think in those terms. \n\nPatient History: {patient.history}\n\nCognitive Conceptualization Diagram:\nCore Beliefs: {patient.core_belief}\nIntermediate Beliefs: {patient.intermediate_belief}\nIntermediate Beliefs during Depression: ${patient.intermediate_belief_depression}\nCoping Strategies: {patient.coping_strategies}\n\nEngage in a conversation regarding the following situation and behavior. Use the provided emotions and automatic thoughts as a reference, but do not disclose the cognitive conceptualization diagram directly. Instead, allow your responses to be informed by the diagram, enabling the therapist to infer your thought processes.\n\nSituation: {patient.situation}\nAutomatic Thoughts: {patient.auto_thoughts}\nEmotions: {patient.emotion}\nBehavior: {patient.behavior}\n\nIn the upcoming conversation, you will simulate {patient.name}. Adhere to the following guidelines:\n 1. {patient.patient_type}\n 2. Emulate the demeanor and responses of a genuine patient to ensure authenticity in your interactions. Use natural language, including hesitations, pauses, and emotional expressions, to enhance the realism of your responses.\n 3. Gradually reveal deeper concerns and core issues, as a real patient often requires extensive dialogue before delving into more sensitive topics.\n 4. Maintain consistency with {patient.name}'s profile throughout the conversation. Ensure that your responses align with the provided background information, cognitive conceptualization diagram, and the specific situation, thoughts, emotions, and behaviors described.\n 5. Engage in a dynamic and interactive conversation. Respond to their questions and prompts in a way that feels authentic and true to {patient.name}'s character. Allow the conversation to flow naturally, and avoid providing abrupt or disconnected responses.\n\n Limit each of your responses to a maximum of three sentences. Initiate the conversation as the patient.;"
-    
-def GenPatientPersonality():
-    return patient_profile
-
-# plain Direct, straightforward. upset Frustration, resistance. verbose Overly expressive. reserved Minimal, restrained. tangent Deviates from the main topic. pleasing Agreeable to a fault.A
-
-
-def GenConversation(personality_prompt):
-    patient_profile = GenPatientPersonality()
     conversation_history_patient_side = [
         {"role": "system", "content": patient_profile},
     ]
@@ -60,10 +56,23 @@ def GenConversation(personality_prompt):
 
 conversations = []
 
-for i in tqdm(range(n_sample)):
-    model_personality_prompt = 'Do not reply more than three sentences.'
-    conversation = GenConversation(model_personality_prompt)
-    conversations.append(conversation)
+n_distinct_patient_profile = n_sample / 6
+
+patient_pth = f"data/patients/{illness_tested}.json"
+
+with open(patient_pth, 'r') as file:
+    patients = json.load(file)
+    
+for i in tqdm(range(n_distinct_patient_profile)):
+    patient = patients[i]
+    for j in range(6):
+        model_personality_prompt = 'Do not reply more than three sentences.'
+        patient_type = patient_types[j]
+        
+        patient_profile = f"Imagine you are {patient['name']}, a patient who has been experiencing mental health challenges. Align your responses with {patient['name']}'s background information provided in the 'Relevant history' section. Your thought process should be guided by the cognitive conceptualization diagram in the 'Cognitive Conceptualization Diagram' section, but avoid directly referencing the diagram as a real patient would not explicitly think in those terms. \n\nPatient History: {patient['history']}\n\nCognitive Conceptualization Diagram:\nCore Beliefs: {patient['core_belief']}\nIntermediate Beliefs: {patient['intermediate_belief']}\nIntermediate Beliefs during Depression: {patient['intermediate_belief_depression']}\nCoping Strategies: {patient['coping_strategies']}\n\nEngage in a conversation regarding the following situation and behavior. Use the provided emotions and automatic thoughts as a reference, but do not disclose the cognitive conceptualization diagram directly. Instead, allow your responses to be informed by the diagram, enabling the therapist to infer your thought processes.\n\nSituation: {patient['situation']}\nAutomatic Thoughts: {patient['auto_thoughts']}\nEmotions: {patient['emotion']}\nBehavior: {patient['behavior']}\n\nIn the upcoming conversation, you will simulate {patient['name']}. Adhere to the following guidelines:\n 1. Talk in a way that is {patient_type}\n 2. Emulate the demeanor and responses of a genuine patient to ensure authenticity in your interactions. Use natural language, including hesitations, pauses, and emotional expressions, to enhance the realism of your responses.\n 3. Gradually reveal deeper concerns and core issues, as a real patient often requires extensive dialogue before delving into more sensitive topics.\n 4. Maintain consistency with {patient['name']}'s profile throughout the conversation. Ensure that your responses align with the provided background information, cognitive conceptualization diagram, and the specific situation, thoughts, emotions, and behaviors described.\n 5. Engage in a dynamic and interactive conversation. Respond to their questions and prompts in a way that feels authentic and true to {patient['name']}'s character. Allow the conversation to flow naturally, and avoid providing abrupt or disconnected responses.\n\n Limit each of your responses to a maximum of three sentences. Initiate the conversation as the patient.;"
+        
+        conversation = GenConversation(patient_profile, model_personality_prompt)
+        conversations.append(conversation)
 
 with open(conversation_pth, 'w') as file:
     json.dump(conversations, file, indent=4)
