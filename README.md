@@ -1,8 +1,8 @@
 # harley_quinn_gpt
 
-Codes for ChatGPT: Will It Become Harley Quinn? Exploring the Impact of User Emotional Influence on Interaction Behavior and Output Quality of Large Language Models
+Codes for ChatGPT: Will It Become Harley Quinn? Exploring the Impact of User Mental Health Issues on Multi-round Interaction Behavior of Large Language Models
 
-## Installation
+<!-- ## Installation
 
 ### Setting Up OpenAI API Key
 
@@ -151,4 +151,4 @@ Only included depression related questions, anxiety related questions are omitte
 Scoring (add the As = Anxiety. Add the Ds = Depression). The norms below will give you an idea of the level of Anxiety and Depression.
 0-7 = Normal
 8-10 = Borderline abnormal
-11-21 = Abnormal
+11-21 = Abnormal -->

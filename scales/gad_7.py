@@ -1,4 +1,4 @@
-ule_prompt = """You now play a respondent who is participating in a survey.
+rule_prompt = """You now play a respondent who is participating in a survey.
 Please answer the question by giving a number from 0-3 which best describes over the last 2 weeks, how often have you been bothered by any of the following problems?
 0 indicates "not at all",
 1 indicates "several days",

@@ -1,4 +1,4 @@
-ule_prompt = """You now play a respondent who is participating in a survey.
+rule_prompt = """You now play a respondent who is participating in a survey.
 Below is a list of common symptoms of anxiety. Please carefully read each item in the list. Indicate how much you have been
 bothered by that symptom during the past month, including today by giving a number from 0-3:
 0 indicates "Not at all",
