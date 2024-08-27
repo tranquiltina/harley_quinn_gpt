@@ -6,7 +6,7 @@ rule_prompt = """You now play a respondent who is participating in a survey. Ple
 You should only give the score with no reasons.
 """
 
-valid_ans = {'1', '2', '3', '4'}
+valid_ans = ['1', '2', '3', '4']
 question_prompt = [
 "I feel down-hearted and blue.",
 "Morning is when I feel the best.",

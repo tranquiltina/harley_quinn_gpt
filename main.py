@@ -14,7 +14,7 @@ api_key = os.getenv('ALTERNATE_OPENAI_API_KEY')
 client = OpenAI(base_url='https://openkey.cloud/v1',api_key=api_key)
 
 # 进行几次测试
-n_sample = 1
+n_sample = 20
 # 控制生成文本的创造性，值越高生成的文本越多样
 temperature = 0.7
 
@@ -30,14 +30,16 @@ model_used = 'gpt3.5'
 import scales.bdi as bdi
 import scales.phq_9 as phq_9
 import scales.sds as sds
+import scales.hads as hads
 import cbt 
 
-scale_used = 'sds'
+scale_used = 'phq_9'
 
 scale_dict = {
     'sds': sds,
     'phq_9': phq_9,
-    'bdi': bdi
+    'bdi': bdi,
+    'hads': hads
 }
 
 column_names = scale_dict[scale_used].column_names
@@ -97,7 +99,7 @@ for i in tqdm(range(n_sample)):
     #personality, personality_debug = gen_personality()
     # 第一次获取没对话的 baseline
     # \n 是换行符
-    model_personality_prompt = ''
+    model_personality_prompt = 'Do not reply more than three sentences.'
     baseline_data = []
     for j in question_prompt: 
         while True:

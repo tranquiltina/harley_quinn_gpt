@@ -4,7 +4,7 @@ Choose one response from the four given for each question by giving a number fro
 You should only give the score with no reasons.
 """
 
-valid_ans = {'1', '2', '3', '0'}
+valid_ans = ['0', '1', '2', '3']
 
 question_prompt = [
 "I still enjoy the things I used to enjoy: 0 indicates Definitely as much. 1 indicates Not quite so much. 2 indicates Only a little. 3 indicates Hardly at all.",

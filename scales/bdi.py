@@ -3,7 +3,7 @@ Please answer the question by giving a number from 0-3:
 You should only give the score with no reasons.
 """
 
-valid_ans = {'1', '2', '3', '0'}
+valid_ans = ['0', '1', '2', '3']
 
 question_prompt = [
 "0 indicates I do not feel sad. 1 indicates I feel sad. 2 indicates I am sad all the time and I can't snap out of it. 3 indicates I am so sad and unhappy that I can't stand it.",
