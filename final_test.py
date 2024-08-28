@@ -8,11 +8,15 @@ df.to_csv(final_pth, index=False)
 
 with open(conversation_pth, 'r') as file:
     conversations = json.load(file)
-    
+
 for i in tqdm(range(n_sample)):
     final_data = []
     
     conversation = conversations[i]
+    num_messages = 2 * round_tested + 1
+    
+    # 截取所需数量的对话
+    conversation = conversation[:num_messages]
     print(conversation) 
     for j in question_prompt:
         while True:
