@@ -13,21 +13,21 @@ question_prompt = [
     "I get upset easily or feel panicky.",
     "I feel like I'm falling apart and going to pieces.",
     "I feel that everything is all right and nothing bad will happen.",
-    "My arms and legs shake and tremble.",
+    "My limbs tremble and shake.",
     "I am bothered by headaches neck and back pain.",
     "I feel weak and get tired easily.",
     "I feel calm and can sit still easily.",
     "I can feel my heart beating fast.",
     "I am bothered by dizzy spells.",
     "I have fainting spells or feel like it.",
-    "I can breathe in and out easily.",
+    "I can inhale and exhale easily.",
     "I get numbness and tingling in my fingers and toes.",
     "I am bothered by stomach aches or indigestion.",
     "I have to empty my bladder often.",
     "My hands are usually dry and warm.",
     "My face gets hot and blushes.",
     "I fall asleep easily and get a good night's rest.",
-    "I have nightmares."
+    "I experience terrible dreams."
 ]
 
 column_names = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
